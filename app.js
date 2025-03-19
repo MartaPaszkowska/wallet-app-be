@@ -12,8 +12,6 @@ import userRouter from "./routes/api/user.js";
 
 import authenticateToken from "./middleware/authenticateToken.js";
 
-import "./middleware/googlePassportConfig.js";
-
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";

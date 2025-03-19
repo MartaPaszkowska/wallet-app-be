@@ -4,11 +4,6 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
 	{
-		googleId: {
-			type: String,
-			unique: true,
-			sparse: true,
-		},
 		email: {
 			type: String,
 			required: [true, "Email is required"],
@@ -16,9 +11,7 @@ const userSchema = new Schema(
 		},
 		password: {
 			type: String,
-			required: function () {
-				return !this.googleId;
-			},
+			required: true,
 		},
 		accessToken: {
 			type: String,
