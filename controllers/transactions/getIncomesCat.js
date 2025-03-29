@@ -3,6 +3,11 @@ import { StatusCodes } from "http-status-codes";
 
 const getIncomesCat = async (req, res, next) => {
 	try {
+		// Tryb demo — zwracamy przykładowe kategorie
+		if (req.user.role === "guest") {
+			return res.status(StatusCodes.OK).json(["Salary", "Bonus"]);
+		}
+
 		const categories = await Transaction.distinct("category", {
 			userId: req.user._id,
 			type: "income",

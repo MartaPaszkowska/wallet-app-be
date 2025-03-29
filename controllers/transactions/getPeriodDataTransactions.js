@@ -11,6 +11,38 @@ const getPeriodDataTransactions = async (req, res, next) => {
 			});
 		}
 
+		// Tryb demo — zwracamy przykładowe podsumowanie
+		if (req.user.role === "guest") {
+			return res.status(StatusCodes.OK).json({
+				incomes: {
+					total: 3800,
+					incomesData: {
+						Salary: {
+							total: 3000,
+							Salary: 3000,
+						},
+						Bonus: {
+							total: 800,
+							Freelance: 800,
+						},
+					},
+				},
+				expenses: {
+					total: 400,
+					incomesData: {
+						Products: {
+							total: 250,
+							Groceries: 250,
+						},
+						Transport: {
+							total: 150,
+							"Train ticket": 150,
+						},
+					},
+				},
+			});
+		}
+
 		const [year, month] = date.split("-");
 		const startDate = new Date(`${year}-${month}-01`);
 		const endDate = new Date(`${year}-${month}-31`);
@@ -44,7 +76,8 @@ const getPeriodDataTransactions = async (req, res, next) => {
 
 			target.incomesData[category].total += amount;
 			target.total += amount;
-			target.incomesData[category][description] = (target.incomesData[category][description] || 0) + amount;
+			target.incomesData[category][description] =
+				(target.incomesData[category][description] || 0) + amount;
 		});
 
 		return res.status(StatusCodes.OK).json(summary);

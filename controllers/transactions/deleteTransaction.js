@@ -1,41 +1,51 @@
-import Transaction from '../../models/transactionSchema.js';
-import User from '../../models/userSchema.js';
-import { StatusCodes } from 'http-status-codes'; 
-
+import Transaction from "../../models/transactionSchema.js";
+import User from "../../models/userSchema.js";
+import { StatusCodes } from "http-status-codes";
 
 const deleteTransaction = async (req, res, next) => {
-  const { transactionId } = req.params; 
+	const { transactionId } = req.params;
 
-  try {
-    const transaction = await Transaction.findByIdAndDelete(transactionId); 
+	// Tryb demo — nic nie usuwamy, tylko udajemy
+	if (req.user.role === "guest") {
+		return res.status(StatusCodes.OK).json({
+			message: "Demo: transaction not deleted",
+			transactionId,
+		});
+	}
 
-    if (!transaction) {
-      return res.status(StatusCodes.NOT_FOUND).json({ message: 'Transaction not found' }); 
-    }
+	try {
+		const transaction = await Transaction.findByIdAndDelete(transactionId);
 
-    const user = await User.findByIdAndUpdate(
-      transaction.userId,
-      { $pull: { transactions: transactionId } },
-      { new: true }
-    );
+		if (!transaction) {
+			return res
+				.status(StatusCodes.NOT_FOUND)
+				.json({ message: "Transaction not found" });
+		}
 
-    if (user) {
-      if (transaction.type === 'income') {
-        user.allIncome -= transaction.amount;
-      } else {
-        user.allExpense -= transaction.amount;
-      }
+		const user = await User.findByIdAndUpdate(
+			transaction.userId,
+			{ $pull: { transactions: transactionId } },
+			{ new: true }
+		);
 
-      user.balance = user.allIncome - user.allExpense;
+		if (user) {
+			if (transaction.type === "income") {
+				user.allIncome -= transaction.amount;
+			} else {
+				user.allExpense -= transaction.amount;
+			}
 
-      await user.save();
-    }
+			user.balance = user.allIncome - user.allExpense;
 
+			await user.save();
+		}
 
-    res.status(StatusCodes.OK).json({ message: 'Transaction deleted successfully' }); 
-  } catch (error) {
-    next(error); 
-  }
+		res.status(StatusCodes.OK).json({
+			message: "Transaction deleted successfully",
+		});
+	} catch (error) {
+		next(error);
+	}
 };
 
 export default deleteTransaction;

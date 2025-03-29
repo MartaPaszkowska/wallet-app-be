@@ -3,28 +3,34 @@ import updateUser from "../../services/updateUser.js";
 import { StatusCodes } from "http-status-codes";
 
 const logoutUser = async (req, res, next) => {
-  try {
-    const { _id } = req.user;
+	try {
+		if (req.user.role === "guest") {
+			return res
+				.status(StatusCodes.OK)
+				.json({ message: "Demo user — no logout needed." });
+		}
 
-    const user = await fetchUser({ _id });
-    if (!user) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: "User not found" });
-    }
+		const { _id } = req.user;
 
-    await updateUser(_id, {
-      accessToken: null,
-      refreshToken: null,
-      sid: null
-    });
+		const user = await fetchUser({ _id });
+		if (!user) {
+			return res
+				.status(StatusCodes.NOT_FOUND)
+				.json({ message: "User not found" });
+		}
 
-    return res
-      .status(StatusCodes.OK)
-      .json({ message: "Successfully logged out" });
-  } catch (err) {
-    next(err);
-  }
+		await updateUser(_id, {
+			accessToken: null,
+			refreshToken: null,
+			sid: null,
+		});
+
+		return res
+			.status(StatusCodes.OK)
+			.json({ message: "Successfully logged out" });
+	} catch (err) {
+		next(err);
+	}
 };
 
 export default logoutUser;
