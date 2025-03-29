@@ -2,34 +2,15 @@ import Transaction from "../../models/transactionSchema.js";
 import { StatusCodes } from "http-status-codes";
 
 const addTransaction = async (req, res) => {
-	const { description, category, amount, date } = req.body;
-
-	// Tryb demo — bez zapisu do bazy
-	if (req.user.role === "guest") {
-		return res.status(StatusCodes.CREATED).json({
-			message: "Demo: transaction not saved",
-			code: StatusCodes.CREATED,
-			data: {
-				_id: "demo-id",
-				description,
-				category,
-				amount,
-				date,
-				owner: "guest-id",
-				type: "demo",
-			},
-		});
-	}
-
 	const { id: userID } = req.user;
 
+	const { description, category, amount, date } = req.body;
 	if (!description) {
 		return res.status(StatusCodes.BAD_REQUEST).json({
 			message: "Description is required",
 			code: StatusCodes.BAD_REQUEST,
 		});
 	}
-
 	if (
 		!category ||
 		![
@@ -55,14 +36,12 @@ const addTransaction = async (req, res) => {
 			code: StatusCodes.BAD_REQUEST,
 		});
 	}
-
 	if (!amount || amount <= 0) {
 		return res.status(StatusCodes.BAD_REQUEST).json({
 			message: "Amount must be greater than zero",
 			code: StatusCodes.BAD_REQUEST,
 		});
 	}
-
 	if (!date) {
 		return res.status(StatusCodes.BAD_REQUEST).json({
 			message: "Date is required",
@@ -75,11 +54,13 @@ const addTransaction = async (req, res) => {
 			...req.body,
 			owner: userID,
 		});
-		return res.status(StatusCodes.CREATED).json({
-			message: "ok",
-			code: StatusCodes.CREATED,
-			data: transaction,
-		});
+		return res
+			.status(StatusCodes.CREATED)
+			.json({
+				message: "ok",
+				code: StatusCodes.CREATED,
+				data: transaction,
+			});
 	} catch (error) {
 		res.status(StatusCodes.BAD_REQUEST).json({
 			message: error.message,
@@ -89,3 +70,9 @@ const addTransaction = async (req, res) => {
 };
 
 export default addTransaction;
+
+// Przykłady wartości dla pól:
+// description: "Zakup artykułów spożywczych"
+// category: "Products"
+// amount: 100.5
+// date: "2024-12-18"

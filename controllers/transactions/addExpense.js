@@ -4,26 +4,6 @@ import { StatusCodes } from "http-status-codes";
 
 const addExpense = async (req, res) => {
 	try {
-		if (req.user.role === "guest") {
-			return res.status(StatusCodes.CREATED).json({
-				message: "Demo: expense not saved",
-				expense: {
-					description: req.body.description,
-					category: req.body.category,
-					amount: req.body.amount,
-					date: req.body.date,
-					type: "expense",
-					_id: "demo-id",
-				},
-				user: {
-					email: "guest@demo.com",
-					balance: 0,
-					allExpense: req.body.amount,
-					transactions: ["demo-id"],
-				},
-			});
-		}
-
 		const { description, category, amount, date } = req.body;
 		const userId = req.user._id;
 
@@ -46,27 +26,27 @@ const addExpense = async (req, res) => {
 			typeof description !== "string" ||
 			!description.trim()
 		) {
-			return res
-				.status(StatusCodes.BAD_REQUEST)
-				.json({ message: "Description must be a non-empty string" });
+			return res.status(StatusCodes.BAD_REQUEST).json({
+				message: "Description must be a non-empty string",
+			});
 		}
 
 		if (!category || !validCategories.includes(category)) {
-			return res
-				.status(StatusCodes.BAD_REQUEST)
-				.json({ message: "Invalid category" });
+			return res.status(StatusCodes.BAD_REQUEST).json({
+				message: "Invalid category",
+			});
 		}
 
 		if (!amount || typeof amount !== "number" || amount <= 0) {
-			return res
-				.status(StatusCodes.BAD_REQUEST)
-				.json({ message: "Amount must be a number greater than 0" });
+			return res.status(StatusCodes.BAD_REQUEST).json({
+				message: "Amount must be a number greater than 0",
+			});
 		}
 
 		if (!date || isNaN(Date.parse(date))) {
-			return res
-				.status(StatusCodes.BAD_REQUEST)
-				.json({ message: "Invalid or missing date" });
+			return res.status(StatusCodes.BAD_REQUEST).json({
+				message: "Invalid or missing date",
+			});
 		}
 
 		const newExpense = new Transaction({

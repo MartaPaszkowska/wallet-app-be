@@ -4,12 +4,6 @@ import { StatusCodes } from "http-status-codes";
 
 const logoutUser = async (req, res, next) => {
 	try {
-		if (req.user.role === "guest") {
-			return res
-				.status(StatusCodes.OK)
-				.json({ message: "Demo user — no logout needed." });
-		}
-
 		const { _id } = req.user;
 
 		const user = await fetchUser({ _id });

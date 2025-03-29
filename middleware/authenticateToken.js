@@ -1,16 +1,6 @@
 import passport from "./passportConfig.js";
 
 const authenticateToken = (req, res, next) => {
-	const authHeader = req.headers["authorization"];
-	const token = authHeader && authHeader.split(" ")[1];
-
-	if (token === "guest-token") {
-		req.user = {
-			email: "guest@demo.com",
-			role: "guest",
-		};
-		return next();
-	}
 	passport.authenticate("jwt", { session: false }, (err, user, info) => {
 		if (err) {
 			return res.status(500).json({ error: "Internal Server Error" });

@@ -4,30 +4,6 @@ import { StatusCodes } from "http-status-codes";
 
 const getUserInfo = async (req, res, next) => {
 	try {
-		// Tryb demo — dane przykładowe
-		if (req.user.role === "guest") {
-			return res.status(StatusCodes.OK).json({
-				email: "guest@demo.com",
-				balance: 0,
-				transactions: [
-					{
-						_id: "demo-1",
-						description: "Lunch",
-						category: "Products",
-						amount: 20,
-						date: "2024-12-05T10:00:00.000Z",
-					},
-					{
-						_id: "demo-2",
-						description: "Salary",
-						category: "Salary",
-						amount: 3000,
-						date: "2024-12-01T09:00:00.000Z",
-					},
-				],
-			});
-		}
-
 		const userId = req.user._id;
 		console.log("Fetching info for User ID:", userId);
 

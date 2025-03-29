@@ -4,27 +4,6 @@ import { StatusCodes } from "http-status-codes";
 
 const addIncome = async (req, res) => {
 	try {
-		// Tryb demo — bez zapisu do bazy
-		if (req.user.role === "guest") {
-			return res.status(StatusCodes.CREATED).json({
-				message: "Demo: income not saved",
-				income: {
-					description: req.body.description,
-					category: req.body.category,
-					amount: req.body.amount,
-					date: req.body.date,
-					type: "income",
-					_id: "demo-id",
-				},
-				user: {
-					email: "guest@demo.com",
-					balance: req.body.amount,
-					allIncome: req.body.amount,
-					transactions: ["demo-id"],
-				},
-			});
-		}
-
 		const { description, category, amount, date } = req.body;
 		const userId = req.user._id;
 

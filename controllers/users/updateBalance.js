@@ -3,14 +3,6 @@ import { StatusCodes } from "http-status-codes";
 
 const updateBalance = async (req, res) => {
 	try {
-		// Tryb demo — nie zapisujemy niczego, tylko udajemy
-		if (req.user.role === "guest") {
-			return res.status(StatusCodes.OK).json({
-				message: "Demo: balance not updated",
-				balance: 0,
-			});
-		}
-
 		const userId = req.user._id;
 		const { newBalance } = req.body;
 

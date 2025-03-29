@@ -3,28 +3,6 @@ import { StatusCodes } from "http-status-codes";
 
 const getExpense = async (req, res) => {
 	try {
-		// Tryb demo — zwracamy przykładowe dane
-		if (req.user.role === "guest") {
-			return res.status(StatusCodes.OK).json({
-				expenses: [
-					{
-						_id: "demo-exp-1",
-						description: "Lunch",
-						amount: 25,
-						date: "2024-12-01T12:00:00.000Z",
-						category: "Products",
-					},
-					{
-						_id: "demo-exp-2",
-						description: "Bus ticket",
-						amount: 8,
-						date: "2024-12-03T08:30:00.000Z",
-						category: "Transport",
-					},
-				],
-			});
-		}
-
 		const userId = req.user._id;
 
 		const expenses = await Transaction.find({

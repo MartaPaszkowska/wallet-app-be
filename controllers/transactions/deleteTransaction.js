@@ -5,14 +5,6 @@ import { StatusCodes } from "http-status-codes";
 const deleteTransaction = async (req, res, next) => {
 	const { transactionId } = req.params;
 
-	// Tryb demo — nic nie usuwamy, tylko udajemy
-	if (req.user.role === "guest") {
-		return res.status(StatusCodes.OK).json({
-			message: "Demo: transaction not deleted",
-			transactionId,
-		});
-	}
-
 	try {
 		const transaction = await Transaction.findByIdAndDelete(transactionId);
 

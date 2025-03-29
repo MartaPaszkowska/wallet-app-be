@@ -3,25 +3,6 @@ import { StatusCodes } from "http-status-codes";
 
 const getUserTransactions = async (req, res) => {
 	try {
-		// Tryb demo — zwracamy przykładowe miesięczne podsumowanie
-		if (req.user.role === "guest") {
-			return res.status(StatusCodes.OK).json({
-				message: "Transactions summary for the demo user",
-				transactions: [
-					{
-						month: 1,
-						totalIncome: 3000,
-						totalExpense: 1200,
-					},
-					{
-						month: 2,
-						totalIncome: 2800,
-						totalExpense: 900,
-					},
-				],
-			});
-		}
-
 		const userId = req.user._id;
 
 		const transactions = await Transaction.aggregate([
@@ -63,10 +44,12 @@ const getUserTransactions = async (req, res) => {
 			transactions: transactionsSummary,
 		});
 	} catch (error) {
-		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-			message: "Error fetching user transactions",
-			error: error.message,
-		});
+		return res
+			.status(StatusCodes.INTERNAL_SERVER_ERROR)
+			.json({
+				message: "Error fetching user transactions",
+				error: error.message,
+			});
 	}
 };
 
