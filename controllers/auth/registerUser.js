@@ -7,8 +7,6 @@ import { v4 as uuidv4 } from "uuid";
 const registerUser = async (req, res, next) => {
 	try {
 		const { email, password } = req.body;
-		z;
-
 		const existingUser = await fetchUser({ email });
 		if (existingUser) {
 			return res.status(StatusCodes.CONFLICT).json({
