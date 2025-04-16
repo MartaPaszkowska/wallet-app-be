@@ -5,8 +5,9 @@ import connectDB from "./config/db.js";
 console.log("Starting server...");
 
 (async () => {
-  await connectDB();
-  app.listen(3000, () => {
-    console.log("Server running. Use our API on port: 3000");
-  });
+	await connectDB();
+	const PORT = process.env.PORT || 3000;
+	app.listen(PORT, () => {
+		console.log(`Server running. Use our API on port: ${PORT}`);
+	});
 })();
