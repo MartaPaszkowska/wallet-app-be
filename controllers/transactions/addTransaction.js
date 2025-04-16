@@ -54,13 +54,11 @@ const addTransaction = async (req, res) => {
 			...req.body,
 			owner: userID,
 		});
-		return res
-			.status(StatusCodes.CREATED)
-			.json({
-				message: "ok",
-				code: StatusCodes.CREATED,
-				data: transaction,
-			});
+		return res.status(StatusCodes.CREATED).json({
+			message: "ok",
+			code: StatusCodes.CREATED,
+			data: transaction,
+		});
 	} catch (error) {
 		res.status(StatusCodes.BAD_REQUEST).json({
 			message: error.message,
@@ -70,9 +68,3 @@ const addTransaction = async (req, res) => {
 };
 
 export default addTransaction;
-
-// Przykłady wartości dla pól:
-// description: "Zakup artykułów spożywczych"
-// category: "Products"
-// amount: 100.5
-// date: "2024-12-18"

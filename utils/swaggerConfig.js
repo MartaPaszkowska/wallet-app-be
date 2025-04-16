@@ -9,7 +9,7 @@ const options = {
 			description: "API Documentation for My Project",
 		},
 	},
-	apis: ["./routes/api/*.js"], // Ścieżka do plików z definicjami endpointów - dodawać przy nowej ścieżce
+	apis: ["./routes/api/*.js"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
